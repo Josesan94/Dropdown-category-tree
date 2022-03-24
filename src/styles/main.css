@@ -1,0 +1,11 @@
+.node-custom-style {
+  margin: 10px;
+}
+
+.first-level-node {
+  font-weight: bolder;
+}
+
+.first-level-node > label > input {
+  display: none;
+}
