@@ -10,13 +10,14 @@ const data = [
     level: 0,
     name: "Computación",
     originalName: "Computación",
-    children: null
+    
   },
   {
     id: "MLA1072",
     level: 0,
     name: "Laptops y accesorios",
     originalName: "Laptops y accesorios",
+
     children: [
       {
         id: "MLA1073",
@@ -98,17 +99,29 @@ const data = [
 ]
 console.log('data',data)
 
+const hasLevel =(data)=>{
+  if(data.level === 0){
+  return (
+    data.className="disabled",
+    data.tagClassName="disabled"
+  )
+}
+  else return;
+}
+
 const Normalizar = (dataArray) => {
   if(!dataArray) return [];
-  return dataArray.map((data)=> ({
-    className: data.className,
-    tagClassName: data.tagClassName,
-    label:data.name,
-    value:data.id,
-    level:data.level,
-    originalName:data.originalName,
-    children: Normalizar(data.children)
-  }))
+  
+  return dataArray.map((data)=> ({className:`checkbox-item ${hasLevel(data)}`,
+  tagClassName:`checkbox-item ${hasLevel(data)}` ,
+  label:data.name,
+  value:data.id,
+  level:data.level,
+  originalName:data.originalName,
+  children: Normalizar(data.children)})
+  
+   
+    )
 }
 
 
@@ -137,10 +150,12 @@ function App() {
     
   }
 
+ 
+
 
   return (
     <div >
-      <DropdownTreeSelect data={categoriasNormalizadas}  />
+      <DropdownTreeSelect data={categoriasNormalizadas} texts={{ placeholder: 'Seleccione sus categorias' , inlineSearchPlaceholder:"Busca tu categoria"}} showDropdown="initial"  showPartiallySelected={true} inlineSearchInput={true}   disablePoppingOnBackspace={false} />
       <button onClick={seleccionarTodo}>Seleccionar todo</button>
       <button onClick={deseleccionarTodo}>Vaciar seleccion</button>
        
