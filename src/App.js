@@ -92,9 +92,31 @@ const arregloCategorias = [
           },
         ],
       },
+
     ],
   },
 ];
+    ]
+  }
+]
+
+
+const Normalizar = (dataArray) => {
+  if(!dataArray) return [];
+  
+  return dataArray.map((data)=> ({className:`checkbox-item ${hasLevel(data)}`,
+  tagClassName:`checkbox-item ${hasLevel(data)}` ,
+  label:data.name,
+  value:data.id,
+  level:data.level,
+  originalName:data.originalName,
+  children: Normalizar(data.children)})
+  
+   
+    )
+}
+
+
 
 const Normalizar = dataArray => {
   if (!dataArray) return [];
@@ -142,6 +164,7 @@ function App() {
     isAllDeselected.current = false;
   };
 
+
   const onNodeChange = (current, selected) => {
     console.log(current);
     console.log(selected);
@@ -156,6 +179,13 @@ function App() {
         inlineSearchInput
         onChange={onNodeChange}
       />
+
+ 
+
+
+  return (
+    <div >
+      <DropdownTreeSelect data={categoriasNormalizadas}/>
       <button onClick={seleccionarTodo}>Seleccionar todo</button>
       <button onClick={deseleccionarTodo}>Vaciar seleccion</button>
     </div>
