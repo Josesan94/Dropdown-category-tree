@@ -102,7 +102,7 @@ const Normalizar = dataArray => {
   if (!dataArray) return [];
   return dataArray.map(data => {
     const isFirstLevelNode = data.level === 0;
-    const hasChildren = data.children !== null;
+  
 
     return {
       className: `node-custom-style ${isFirstLevelNode && 'first-level-node'}`,
@@ -153,13 +153,9 @@ function App() {
   const onNodeChange = (current, selected,arr) => {
     console.log('current',current)
     console.log('selected',selected)
-    if(!arr) return [];
-    arr.map((node)=>{
-      return ({
-        ...node,
-
-      })
-    })
+  //  aqui deberia tratar de hacer una funcion que al cambiar el estado del 
+  // checkbox padre, checkboxes de los hijos se pinten pero en gris.
+  // se podria determinar con los aria-level que ya me dan los niveles
     
     
   }
@@ -168,6 +164,8 @@ function App() {
     if(node.checked === true){
       return action ;
     }
+
+    //Habria que ver como se puede usar esta funcion tambien
   }
 
   
@@ -178,7 +176,10 @@ function App() {
       <DropdownTreeSelect
         data={datax}
         showPartiallySelected={true}
-        className="mdl-demo"
+        //este seleccionado parcial es engañoso porque al seleccionar una 
+        //categoria hija que a su vez no tiene hijos, se selecciona la padre
+        //probar con el nodo "Audio"
+        className="mdl-demo" //le coloco este nombre para que me tome todos los cambios que le añado a otros selectores
         onChange={onNodeChange}
         onAction={onAction}
       />
