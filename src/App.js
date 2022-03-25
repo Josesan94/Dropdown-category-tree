@@ -2,6 +2,7 @@ import React, {useRef, useState} from 'react';
 import DropdownTreeSelect from 'react-dropdown-tree-select';
 import 'react-dropdown-tree-select/dist/styles.css';
 import './styles/main.css';
+import './index.css'
 
 const arregloCategorias = [
   {
@@ -96,32 +97,12 @@ const arregloCategorias = [
     ],
   },
 ];
-    ]
-  }
-]
-
-
-const Normalizar = (dataArray) => {
-  if(!dataArray) return [];
-  
-  return dataArray.map((data)=> ({className:`checkbox-item ${hasLevel(data)}`,
-  tagClassName:`checkbox-item ${hasLevel(data)}` ,
-  label:data.name,
-  value:data.id,
-  level:data.level,
-  originalName:data.originalName,
-  children: Normalizar(data.children)})
-  
-   
-    )
-}
-
-
 
 const Normalizar = dataArray => {
   if (!dataArray) return [];
   return dataArray.map(data => {
     const isFirstLevelNode = data.level === 0;
+    const hasChildren = data.children !== null;
 
     return {
       className: `node-custom-style ${isFirstLevelNode && 'first-level-node'}`,
@@ -131,13 +112,13 @@ const Normalizar = dataArray => {
       level: data.level,
       disabled: isFirstLevelNode,
       originalName: data.originalName,
-      children: Normalizar(data.children),
+      children: Normalizar(data.children,),
     };
   });
 };
 
 const categoriasNormalizadas = Normalizar(arregloCategorias);
-console.log('normalizadas', categoriasNormalizadas);
+
 
 function App() {
   const [datax, setDatax] = useState(categoriasNormalizadas);
@@ -145,9 +126,8 @@ function App() {
   const isAllDeselected = useRef(false);
 
   const deseleccionarTodo = () => {
-    if (isAllDeselected) return;
-    datax[0].checked = false;
-    setDatax(datax);
+    if (isAllDeselected.current) return;
+    setDatax(deselectAllNodes(datax));
     isAllDeselected.current = true;
     isAllSelected.current = false;
   };
@@ -157,6 +137,11 @@ function App() {
     return arr.map(v => ({...v, children: selectAllNodes(v.children), checked: true}));
   };
 
+  const deselectAllNodes = arr => {
+    if(!arr) return [];
+    return arr.map(node=> ({...node, children:deselectAllNodes(node.children),checked:false}))
+  }
+
   const seleccionarTodo = () => {
     if (isAllSelected.current) return;
     setDatax(selectAllNodes(datax));
@@ -165,27 +150,38 @@ function App() {
   };
 
 
-  const onNodeChange = (current, selected) => {
-    console.log(current);
-    console.log(selected);
-  };
+  const onNodeChange = (current, selected,arr) => {
+    console.log('current',current)
+    console.log('selected',selected)
+    if(!arr) return [];
+    arr.map((node)=>{
+      return ({
+        ...node,
 
+      })
+    })
+    
+    
+  }
+
+  function onAction(node, action) {
+    if(node.checked === true){
+      return action ;
+    }
+  }
+
+  
+
+  
   return (
     <div>
       <DropdownTreeSelect
         data={datax}
-        showPartiallySelected
-        showDropdown="initial"
-        inlineSearchInput
+        showPartiallySelected={true}
+        className="mdl-demo"
         onChange={onNodeChange}
+        onAction={onAction}
       />
-
- 
-
-
-  return (
-    <div >
-      <DropdownTreeSelect data={categoriasNormalizadas}/>
       <button onClick={seleccionarTodo}>Seleccionar todo</button>
       <button onClick={deseleccionarTodo}>Vaciar seleccion</button>
     </div>
