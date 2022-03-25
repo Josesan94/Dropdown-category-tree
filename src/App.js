@@ -121,6 +121,7 @@ const categoriasNormalizadas = Normalizar(arregloCategorias);
 
 
 function App() {
+  const [counter,setCounter] = useState(0)
   const [datax, setDatax] = useState(categoriasNormalizadas);
   const isAllSelected = useRef(false);
   const isAllDeselected = useRef(false);
@@ -149,6 +150,8 @@ function App() {
     isAllDeselected.current = false;
   };
 
+  
+
 
   const onNodeChange = (current, selected,arr) => {
     console.log('current',current)
@@ -162,9 +165,13 @@ function App() {
 
   function onAction(node, action) {
     if(node.checked === true){
-      return action ;
+      setCounter(counter+1)
     }
-
+    if(node.checked === false){
+      setCounter(counter-1)
+    }
+    return counter;
+    
     //Habria que ver como se puede usar esta funcion tambien
   }
 
@@ -173,6 +180,7 @@ function App() {
   
   return (
     <div>
+      <h1>categorias:{counter}</h1>
       <DropdownTreeSelect
         data={datax}
         showPartiallySelected={true}
@@ -182,6 +190,7 @@ function App() {
         className="mdl-demo" //le coloco este nombre para que me tome todos los cambios que le añado a otros selectores
         onChange={onNodeChange}
         onAction={onAction}
+        showDropdown="always"
       />
       <button onClick={seleccionarTodo}>Seleccionar todo</button>
       <button onClick={deseleccionarTodo}>Vaciar seleccion</button>

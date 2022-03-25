@@ -71,6 +71,14 @@ pueden ser cliqueadas */
 porque no se le puede cambiar el color(en el caso que necesito cuando se selecciona una padre,
 todas las hijas quedan en checked pero con color gris) */
 input[type="checkbox" i]:checked {
-  margin:10px;
+  margin:5px
 /* background-color: grey; */
 }
+
+/* estas clases manejan el dropdown y el trigger. Lo escondi y configure
+para me muestre solamente el dropdown desplegado siempre */
+.react-dropdown-tree-select .dropdown .dropdown-trigger.arrow {
+  cursor: pointer;
+  display: none;
+}
+
