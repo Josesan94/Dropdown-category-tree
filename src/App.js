@@ -153,9 +153,18 @@ function App() {
   
 
 
-  const onNodeChange = (current, selected,arr) => {
-    console.log('current',current)
-    console.log('selected',selected)
+  const onNodeChange = (current, selected) => {
+    console.log('current',current.checked)
+    console.log('selected',selected[0]?.checked)
+    if(current.checked === true){
+      return setCounter(counter+1);
+    }
+    else return setCounter(counter-1)
+    
+    
+
+    
+
   //  aqui deberia tratar de hacer una funcion que al cambiar el estado del 
   // checkbox padre, checkboxes de los hijos se pinten pero en gris.
   // se podria determinar con los aria-level que ya me dan los niveles
@@ -163,17 +172,7 @@ function App() {
     
   }
 
-  function onAction(node, action) {
-    if(node.checked === true){
-      setCounter(counter+1)
-    }
-    if(node.checked === false){
-      setCounter(counter-1)
-    }
-    return counter;
-    
-    //Habria que ver como se puede usar esta funcion tambien
-  }
+  
 
   
 
@@ -189,7 +188,6 @@ function App() {
         //probar con el nodo "Audio"
         className="mdl-demo" //le coloco este nombre para que me tome todos los cambios que le añado a otros selectores
         onChange={onNodeChange}
-        onAction={onAction}
         showDropdown="always"
       />
       <button onClick={seleccionarTodo}>Seleccionar todo</button>

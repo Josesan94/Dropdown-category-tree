@@ -82,3 +82,10 @@ para me muestre solamente el dropdown desplegado siempre */
   display: none;
 }
 
+
+/* elimino los bordes y el sombreado del contenedor de las categorias */
+.react-dropdown-tree-select .dropdown .dropdown-content {
+  border:none !important;
+  box-shadow:none ! important;
+  
+}
