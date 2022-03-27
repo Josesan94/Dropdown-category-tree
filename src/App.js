@@ -1,8 +1,8 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import DropdownTreeSelect from 'react-dropdown-tree-select';
 import 'react-dropdown-tree-select/dist/styles.css';
 import './styles/main.css';
-import './index.css'
+import './index.css';
 
 const arregloCategorias = [
   {
@@ -93,7 +93,6 @@ const arregloCategorias = [
           },
         ],
       },
-
     ],
   },
 ];
@@ -102,7 +101,6 @@ const Normalizar = dataArray => {
   if (!dataArray) return [];
   return dataArray.map(data => {
     const isFirstLevelNode = data.level === 0;
-  
 
     return {
       className: `node-custom-style ${isFirstLevelNode && 'first-level-node'}`,
@@ -110,27 +108,35 @@ const Normalizar = dataArray => {
       label: data.name,
       value: data.id,
       level: data.level,
+      expanded: true,
       disabled: isFirstLevelNode,
       originalName: data.originalName,
-      children: Normalizar(data.children,),
+      children: Normalizar(data.children),
     };
   });
 };
 
 const categoriasNormalizadas = Normalizar(arregloCategorias);
 
-
 function App() {
-  const [counter,setCounter] = useState(0)
+  const [counter, setCounter] = useState(0);
   const [datax, setDatax] = useState(categoriasNormalizadas);
   const isAllSelected = useRef(false);
   const isAllDeselected = useRef(false);
-
+  const [selectedNodes, setSelectedNodes] = useState([]);
   const deseleccionarTodo = () => {
     if (isAllDeselected.current) return;
     setDatax(deselectAllNodes(datax));
     isAllDeselected.current = true;
     isAllSelected.current = false;
+  };
+
+  const recorrerArbol = (arbol, propiedad, valor) => {
+    if (!arbol) return;
+    arbol.map(nodo => {
+      //hago lo que tengo que hacer con los nodos
+      return {...nodo, [propiedad]: valor, children: recorrerArbol(nodo.children)};
+    });
   };
 
   const selectAllNodes = arr => {
@@ -139,9 +145,9 @@ function App() {
   };
 
   const deselectAllNodes = arr => {
-    if(!arr) return [];
-    return arr.map(node=> ({...node, children:deselectAllNodes(node.children),checked:false}))
-  }
+    if (!arr) return [];
+    return arr.map(node => ({...node, children: deselectAllNodes(node.children), checked: false}));
+  };
 
   const seleccionarTodo = () => {
     if (isAllSelected.current) return;
@@ -150,40 +156,28 @@ function App() {
     isAllDeselected.current = false;
   };
 
-  
-
-
   const onNodeChange = (current, selected) => {
-    console.log('current',current.checked)
-    console.log('selected',selected[0]?.checked)
-    if(current.checked === true){
-      return setCounter(counter+1);
-    }
-    else return setCounter(counter-1)
-    
-    
+    console.log('current', current);
+    console.log('selected', selected);
+    if (current.checked) {
+      setSelectedNodes(prev => [...prev, {...current}]);
+      setCounter(counter + 1);
+    } else setCounter(counter - 1);
 
-    
+    //  aqui deberia tratar de hacer una funcion que al cambiar el estado del
+    // checkbox padre, checkboxes de los hijos se pinten pero en gris.
+    // se podria determinar con los aria-level que ya me dan los niveles
+  };
 
-  //  aqui deberia tratar de hacer una funcion que al cambiar el estado del 
-  // checkbox padre, checkboxes de los hijos se pinten pero en gris.
-  // se podria determinar con los aria-level que ya me dan los niveles
-    
-    
-  }
+  useEffect(() => {}, selectedNodes);
 
-  
-
-  
-
-  
   return (
     <div>
       <h1>categorias:{counter}</h1>
       <DropdownTreeSelect
         data={datax}
         showPartiallySelected={true}
-        //este seleccionado parcial es engañoso porque al seleccionar una 
+        //este seleccionado parcial es engañoso porque al seleccionar una
         //categoria hija que a su vez no tiene hijos, se selecciona la padre
         //probar con el nodo "Audio"
         className="mdl-demo" //le coloco este nombre para que me tome todos los cambios que le añado a otros selectores
@@ -192,6 +186,7 @@ function App() {
       />
       <button onClick={seleccionarTodo}>Seleccionar todo</button>
       <button onClick={deseleccionarTodo}>Vaciar seleccion</button>
+      <button onClick={() => console.log(selectedNodes)}>Mostrar nodos</button>
     </div>
   );
 }

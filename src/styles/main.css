@@ -1,15 +1,13 @@
-
 /* ESTILOS DE LOS TOGGLE  */
 
 /* fallback, until https://github.com/CompuIves/codesandbox-client/issues/174 is resolved */
 @font-face {
-  font-family: "Material Icons";
+  font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
   src: url(https://fonts.gstatic.com/s/materialicons/v36/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2)
-    format("woff2");
+    format('woff2');
 }
-
 
 .mdl-demo .dropdown-trigger > span:after {
   font-size: 12px;
@@ -17,7 +15,7 @@
 }
 
 .mdl-demo .toggle {
-  font: normal normal normal 18px/1 "Material Icons";
+  font: normal normal normal 18px/1 'Material Icons';
   color: #555;
   white-space: pre;
   margin-right: 4px;
@@ -25,18 +23,17 @@
 
 .mdl-demo .toggle.collapsed::after {
   cursor: pointer;
-  content: "\E5CE";
+  content: '\E5CE';
   vertical-align: middle;
 }
 
 .mdl-demo .toggle.expanded::after {
   cursor: pointer;
-  content: "\E5CF";
+  content: '\E5CF';
   vertical-align: middle;
 }
 
 /* ESTILOS DE LOS TOGGLE  */
-
 
 .node-custom-style {
   margin: 10px;
@@ -44,35 +41,35 @@
 
 .first-level-node {
   font-weight: bolder;
-  color:black;
-  cursor:pointer;
+  color: black;
+  cursor: pointer;
 }
 
 .first-level-node:hover {
   background-color: rgba(231, 231, 231, 0.8);
 }
 
-.node-custom-style:hover{
+.node-custom-style:hover {
   background-color: rgba(231, 231, 231, 0.8);
 }
 
-
 .first-level-node > label > input {
   display: none;
-  
 }
 
 /* con estas clases le doy estilo a las categorias de nivel 0 que no
 pueden ser cliqueadas */
-.node.disabled>*
-{color:rgb(7, 2, 2);cursor:pointer}
+.node.disabled > * {
+  color: rgb(7, 2, 2);
+  cursor: pointer;
+}
 
 /* este selector le da estilos al checkbox cuando esta en checked, pero nose
 porque no se le puede cambiar el color(en el caso que necesito cuando se selecciona una padre,
 todas las hijas quedan en checked pero con color gris) */
-input[type="checkbox" i]:checked {
-  margin:5px
-/* background-color: grey; */
+.node-custom-style > label > input[type='checkbox' i]:checked {
+  margin: 5px;
+  filter: grayscale(100%);
 }
 
 /* estas clases manejan el dropdown y el trigger. Lo escondi y configure
@@ -82,10 +79,8 @@ para me muestre solamente el dropdown desplegado siempre */
   display: none;
 }
 
-
 /* elimino los bordes y el sombreado del contenedor de las categorias */
 .react-dropdown-tree-select .dropdown .dropdown-content {
-  border:none !important;
-  box-shadow:none ! important;
-  
+  border: none !important;
+  box-shadow: none !important;
 }
