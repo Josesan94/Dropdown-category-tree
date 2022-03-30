@@ -3,6 +3,8 @@ import DropdownTreeSelect from 'react-dropdown-tree-select';
 import 'react-dropdown-tree-select/dist/styles.css';
 import './styles/main.css';
 import './index.css';
+import isEqual from "lodash/isEqual";
+
 
 const arregloCategorias = [
   {
@@ -101,6 +103,7 @@ const Normalizar = dataArray => {
   if (!dataArray) return [];
   return dataArray.map(data => {
     const isFirstLevelNode = data.level === 0;
+    const isExpandedNode = data.level !== 0
 
     return {
       className: `node-custom-style ${isFirstLevelNode && 'first-level-node'}`,
@@ -108,7 +111,7 @@ const Normalizar = dataArray => {
       label: data.name,
       value: data.id,
       level: data.level,
-      expanded: true,
+      expanded: isExpandedNode,
       disabled: isFirstLevelNode,
       originalName: data.originalName,
       children: Normalizar(data.children),
@@ -156,9 +159,21 @@ function App() {
     isAllDeselected.current = false;
   };
 
+  useEffect(() => {
+    if (!isEqual(datax, categoriasNormalizadas)) {
+      setDatax({ categoriasNormalizadas: datax });
+    }
+    return !isEqual(datax, categoriasNormalizadas);
+  },[datax]);
+
+  
+
+
+  
   const onNodeChange = (current, selected) => {
-    console.log('current', current);
-    console.log('selected', selected);
+    console.log('current', current.bread);
+    // console.log('selected', selected);
+    //assignBreadCrumbs(datax);
     if (current.checked) {
       setSelectedNodes(prev => [...prev, {...current}]);
       setCounter(counter + 1);
@@ -169,20 +184,36 @@ function App() {
     // se podria determinar con los aria-level que ya me dan los niveles
   };
 
-  useEffect(() => {}, selectedNodes);
+  
+
+  
+
+  
+
+  // function assignBreadCrumbs(tree, bread) {
+  //   if (Array.isArray(tree)) {
+  //     tree.forEach(e => assignBreadCrumbs(e, bread))
+  //   } else if (typeof tree === 'object') {
+  //     tree.bread = `${bread ? `${bread} > `: ''}${tree.label}`    
+  //     if (tree.children) assignBreadCrumbs(tree.children, tree.bread)
+  //   }
+  // }
 
   return (
     <div>
       <h1>categorias:{counter}</h1>
+
       <DropdownTreeSelect
         data={datax}
-        showPartiallySelected={true}
+        
         //este seleccionado parcial es engañoso porque al seleccionar una
         //categoria hija que a su vez no tiene hijos, se selecciona la padre
         //probar con el nodo "Audio"
         className="mdl-demo" //le coloco este nombre para que me tome todos los cambios que le añado a otros selectores
         onChange={onNodeChange}
         showDropdown="always"
+        keepTreeOnSearch
+        
       />
       <button onClick={seleccionarTodo}>Seleccionar todo</button>
       <button onClick={deseleccionarTodo}>Vaciar seleccion</button>
