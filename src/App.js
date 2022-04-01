@@ -1,10 +1,10 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import DropdownTreeSelect from 'react-dropdown-tree-select';
 import 'react-dropdown-tree-select/dist/styles.css';
 import './styles/main.css';
 import './index.css';
-import isEqual from "lodash/isEqual";
-
+import isEqual from 'lodash/isEqual';
+import ArbolCategorias from './components/ArbolCategorias';
 
 const arregloCategorias = [
   {
@@ -103,7 +103,7 @@ const Normalizar = dataArray => {
   if (!dataArray) return [];
   return dataArray.map(data => {
     const isFirstLevelNode = data.level === 0;
-    const isExpandedNode = data.level !== 0
+    const isExpandedNode = data.level !== 0;
 
     return {
       className: `node-custom-style ${isFirstLevelNode && 'first-level-node'}`,
@@ -158,43 +158,27 @@ function App() {
     isAllSelected.current = true;
     isAllDeselected.current = false;
   };
+  console.log('Render');
 
   useEffect(() => {
     if (!isEqual(datax, categoriasNormalizadas)) {
-      setDatax({ categoriasNormalizadas: datax });
+      setDatax({categoriasNormalizadas: datax});
     }
     return !isEqual(datax, categoriasNormalizadas);
-  },[datax]);
+  }, [datax]);
 
-  
-
-
-  
-  const onNodeChange = (current, selected) => {
-    console.log('current', current.bread);
-    // console.log('selected', selected);
-    //assignBreadCrumbs(datax);
-    if (current.checked) {
-      setSelectedNodes(prev => [...prev, {...current}]);
-      setCounter(counter + 1);
-    } else setCounter(counter - 1);
-
+  const onNodeChange = useCallback((current, selected) => {
+    setCounter(prev => prev + 1);
     //  aqui deberia tratar de hacer una funcion que al cambiar el estado del
     // checkbox padre, checkboxes de los hijos se pinten pero en gris.
     // se podria determinar con los aria-level que ya me dan los niveles
-  };
-
-  
-
-  
-
-  
+  }, []);
 
   // function assignBreadCrumbs(tree, bread) {
   //   if (Array.isArray(tree)) {
   //     tree.forEach(e => assignBreadCrumbs(e, bread))
   //   } else if (typeof tree === 'object') {
-  //     tree.bread = `${bread ? `${bread} > `: ''}${tree.label}`    
+  //     tree.bread = `${bread ? `${bread} > `: ''}${tree.label}`
   //     if (tree.children) assignBreadCrumbs(tree.children, tree.bread)
   //   }
   // }
@@ -202,19 +186,7 @@ function App() {
   return (
     <div>
       <h1>categorias:{counter}</h1>
-
-      <DropdownTreeSelect
-        data={datax}
-        
-        //este seleccionado parcial es engañoso porque al seleccionar una
-        //categoria hija que a su vez no tiene hijos, se selecciona la padre
-        //probar con el nodo "Audio"
-        className="mdl-demo" //le coloco este nombre para que me tome todos los cambios que le añado a otros selectores
-        onChange={onNodeChange}
-        showDropdown="always"
-        keepTreeOnSearch
-        
-      />
+      <ArbolCategorias data={datax} onNodeChange={onNodeChange} />
       <button onClick={seleccionarTodo}>Seleccionar todo</button>
       <button onClick={deseleccionarTodo}>Vaciar seleccion</button>
       <button onClick={() => console.log(selectedNodes)}>Mostrar nodos</button>
