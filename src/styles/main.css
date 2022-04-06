@@ -39,10 +39,17 @@
   margin: 10px;
 }
 
-.first-level-node {
-  font-weight: bolder;
-  color: black;
-  cursor: pointer;
+.first-level-node > *  {
+  font-weight: bolder !important;
+  color: rgb(14, 11, 11) !important;
+  cursor: pointer !important;
+}
+.node-custom-style .disabled-categorie  {
+  color:rgb(196, 191, 191);
+  cursor:none;
+}
+.node-custom-style .disabled-categorie:hover >label {
+ background-color: white !important;
 }
 
 .first-level-node:hover {
@@ -57,18 +64,37 @@
   display: none;
 }
 
+/* alineacion y margen de los checkboxs */
+.checkbox-item {
+  vertical-align: middle;
+  margin: -1px 8px 0 0 !important;
+}
+
+
 /* con estas clases le doy estilo a las categorias de nivel 0 que no
 pueden ser cliqueadas */
 .node.disabled > * {
-  color: rgb(7, 2, 2);
+  color: rgb(212, 212, 212);
   cursor: pointer;
 }
+
+/* el toggle de las categorias inhabilitadas tiene que ir en negro */
+.mdl-demo .toggle.expanded {
+  color:black !important
+}
+
+
 
 /* este selector le da estilos al checkbox cuando esta en checked, pero nose
 porque no se le puede cambiar el color(en el caso que necesito cuando se selecciona una padre,
 todas las hijas quedan en checked pero con color gris) */
 .node-custom-style > label > input[type='checkbox' i]:checked {
   margin: 5px;
+  /* filter: grayscale(100%); */
+}
+
+.node-custom-style2 > label > input[type='checkbox' i]:checked {
+  margin: 10px;
   filter: grayscale(100%);
 }
 
@@ -83,4 +109,5 @@ para me muestre solamente el dropdown desplegado siempre */
 .react-dropdown-tree-select .dropdown .dropdown-content {
   border: none !important;
   box-shadow: none !important;
+  position: relative;
 }
